@@ -71,8 +71,10 @@ function Home() {
                     <Grid divided='vertically' padded>
                         <Grid.Row columns={2}>
                             <Grid.Column textAlign='center' width={3} >
-                                <Image centered src="https://cdn.pixabay.com/photo/2013/04/01/09/22/thunderstorm-98541_1280.png" size='tiny'></Image>
-                                <p>{weather['current']['weather'][0]['description']}</p>
+                                <div style={{overflow: 'hidden'}}>
+                                    <Image style={{transform: 'scale(1.8)'}} centered src= {'https://openweathermap.org/img/wn/'+ weather['current']['weather'][0]['icon']+'@4x.png'} size="tiny"></Image>
+                                </div>
+                                <p >{(weather['current']['weather'][0]['description']).toUpperCase()}</p>
                             </Grid.Column>
                             <Grid.Column textAlign='left' width={3}>
                                 <span style={{fontSize: '30px'}}>{weather['current']['temp']}°C</span><br/><br/>
