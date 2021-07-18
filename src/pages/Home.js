@@ -1,7 +1,7 @@
 // import React from 'react'
 import React, { useState, useEffect } from 'react'
 import axios from 'axios';
-import { Grid, Container, Header } from 'semantic-ui-react'
+import { Grid, Container, Image} from 'semantic-ui-react'
 
 function Home() {
     const [latitude, setLatitude] = useState(null)
@@ -53,6 +53,16 @@ function Home() {
                 // always executed
             });
     }
+    function getPrecip(){
+        var today = Math.round((new Date()).getTime() / 1000);
+        var pop;
+        for (let element of weather['hourly'] ) {
+            pop = element['pop']
+            console.log(element['dt'])
+            if (today >= element['dt']) break
+        }
+        return pop*100
+    }
 
     return (
         <>{
@@ -60,10 +70,17 @@ function Home() {
                 <Container>
                     <Grid divided='vertically' padded>
                         <Grid.Row columns={2}>
-                            <Grid.Column textAlign='left' width={4} >
-                                <h4>{weather['current']['weather'][0]['description']}</h4>
+                            <Grid.Column textAlign='center' width={3} >
+                                <Image centered src="https://cdn.pixabay.com/photo/2013/04/01/09/22/thunderstorm-98541_1280.png" size='tiny'></Image>
+                                <p>{weather['current']['weather'][0]['description']}</p>
                             </Grid.Column>
-                            <Grid.Column textAlign='right' width={12}>
+                            <Grid.Column textAlign='left' width={3}>
+                                <span style={{fontSize: '30px'}}>{weather['current']['temp']}°C</span><br/><br/>
+                                <span style={{color:"gray"}} >Humidity: {weather['current']['humidity']}%</span><br/>
+                                <span style={{color:"gray"}} >Wind: {weather['current']['wind_speed']}m/s</span><br/>
+                                <span style={{color:"gray"}} >Precipitation: {getPrecip()}%</span><br/>
+                            </Grid.Column>
+                            <Grid.Column textAlign='right' width={10}>
                                 <p style={{fontSize: '22px'}}>{location['address']['county'] + ", " + location['address']['city']}
                                 <br/>
                                 {   
