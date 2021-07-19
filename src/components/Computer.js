@@ -12,9 +12,9 @@ function Computer(props) {
             </Grid.Column>
             <Grid.Column textAlign='left' width={3}>
                 <p style={{ fontSize: '28px', marginBottom: '-15px' }}>{props.weather['current']['temp']}°C</p><br />
-                <span style={{ color: "gray" }} >Humidity: {props.weather['current']['humidity']}%</span><br />
-                <span style={{ color: "gray" }} >Wind: {props.weather['current']['wind_speed']}m/s</span><br />
-                <span style={{ color: "gray" }} >Precipitation: {props.weather['hourly'][0]['pop']}%</span><br />
+                <span style={{ color: "#3b3b3b" }} >Humidity: {props.weather['current']['humidity']}%</span><br />
+                <span style={{ color: "#3b3b3b" }} >Wind: {props.weather['current']['wind_speed']}m/s</span><br />
+                <span style={{ color: "#3b3b3b" }} >Precipitation: {props.weather['hourly'][0]['pop'] * 100}%</span><br />
             </Grid.Column>
             <Grid.Column textAlign='right' width={10}>
                 <p style={{ fontSize: '22px' }}>{props.location['address']['county'] + ", " + props.location['address']['city']}
@@ -27,7 +27,7 @@ function Computer(props) {
                         )
                     }
                     <br />
-                    <span style={{ fontSize: '18px', color: 'gray' }}>{props.location['address']['country']}</span>
+                    <span style={{ fontSize: '18px', color: 'black' }}>{new Date(props.weather['current']['dt']*1000).getHours()}:00</span>
                 </p>
             </Grid.Column>
         </Grid.Row>
