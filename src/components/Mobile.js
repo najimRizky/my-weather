@@ -15,7 +15,7 @@ function Mobile(props) {
                         )
                     }
                     <br />
-                    <span style={{ fontSize: '18px', color: 'black' }}>{new Date(props.weather['current']['dt']*1000).getHours()}:00</span>
+                    <span style={{ fontSize: '18px', color: '#3b3b3b' }}>{new Date(props.weather['current']['dt']*1000).getHours()}:00</span>
                     {/* <span style={{ fontSize: '18px', color: 'gray' }}>{props.location['address']['country']}</span> */}
                 </p>
             </Grid.Column>

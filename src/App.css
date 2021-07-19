@@ -51,6 +51,6 @@ html, body, #root, .App {
 
 @keyframes mymove {
   0% {bottom: 0px; filter: brightness(100%);} 
-  50% {bottom: 8px; filter: brightness(90%);}
+  50% {bottom: 6px; filter: brightness(90%);}
  100% {bottom: 0px; filter: brightness(100%);}
 }

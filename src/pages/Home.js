@@ -93,8 +93,8 @@ function Home() {
                             weather['hourly'].slice(1).map(item => {
                                 return (
                                     <div key={item['dt']} style={{ display: 'inline-block', textAlign: 'left', margin: '0px 20px 10px 0px' }}>
-                                        <Card style={{ maxWidth: "160px", backgroundColor: 'rgba(170, 170, 170, 0.5)', border: 'none', boxShadow: 'none' ,}} >
-                                            <img style={{ filter: 'brightness(90%)', textAlign: 'center' }} centered src={'https://openweathermap.org/img/wn/' + item['weather'][0]['icon'] + '@4x.png'} size="small" alt="Not Found" />
+                                        <Card style={{ maxWidth: "160px", backgroundColor: 'rgba(255, 255, 255, 0.2)', border: 'none', boxShadow: 'none' ,}} >
+                                            <img style={{ filter: 'brightness(100%)', textAlign: 'center' }} centered src={'https://openweathermap.org/img/wn/' + item['weather'][0]['icon'] + '@4x.png'} size="small" alt="Not Found" />
                                             <Card.Content >
                                                 {/* <Card.Header>{getTime(item['dt']*1000)}</Card.Header> */}
                                                 <Card.Header style={{ fontSize: '15px' }}>{getTime(item['dt'] * 1000)}</Card.Header>
@@ -105,10 +105,10 @@ function Home() {
                                                     <FontAwesomeIcon icon={faCloudRain} color="white" />&ensp;{(item['pop']*100).toFixed(0)}%
                                                 </Card.Description>
                                                 <Card.Description>
-                                                    <FontAwesomeIcon icon={faThermometerHalf} color="#ff7575"/>&emsp;{item['temp'].toFixed(0)}°C
+                                                    <FontAwesomeIcon icon={faThermometerHalf} color="#e34744"/>&emsp;{item['temp'].toFixed(0)}°C
                                                 </Card.Description>
                                                 <Card.Description>
-                                                    <FontAwesomeIcon icon={faTint} color="#63b2f2"/>&ensp;&nbsp;&nbsp;{item['humidity'].toFixed(0)}%
+                                                    <FontAwesomeIcon icon={faTint} color="#4493d4"/>&ensp;&nbsp;&nbsp;{item['humidity'].toFixed(0)}%
                                                 </Card.Description>
                                                 <Card.Description>
                                                     <FontAwesomeIcon icon={faWind}  />&ensp;{item['wind_speed'].toFixed(0)} m/s
