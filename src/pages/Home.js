@@ -1,7 +1,7 @@
 // import React from 'react'
 import React, { useState, useEffect } from 'react'
 import axios from 'axios';
-import { Grid, Container, Card, Icon, Image } from 'semantic-ui-react'
+import { Grid, Container, Card} from 'semantic-ui-react'
 import Mobile from './../components/Mobile'
 import Computer from './../components/Computer'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
