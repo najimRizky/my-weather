@@ -1,7 +1,9 @@
 // import React from 'react'
 import React, { useState, useEffect } from 'react'
 import axios from 'axios';
-import { Grid, Container, Image} from 'semantic-ui-react'
+import { Grid, Container, Card, Icon, Image } from 'semantic-ui-react'
+import Mobile from './../components/Mobile'
+import Computer from './../components/Computer'
 
 function Home() {
     const [latitude, setLatitude] = useState(null)
@@ -53,15 +55,17 @@ function Home() {
                 // always executed
             });
     }
-    function getPrecip(){
-        var today = Math.round((new Date()).getTime() / 1000);
-        var pop;
-        for (let element of weather['hourly'] ) {
-            pop = element['pop']
-            console.log(element['dt'])
-            if (today >= element['dt']) break
-        }
-        return pop*100
+
+    function getTime(val){
+        let date = new Date(val)
+        // let day = (date.getDay() == 0) ? "Monday" 
+        //             : (date.getDay() == 1) ? "Tuesday" 
+        //             : (date.getDay() == 2) ? "Wednesday" 
+        //             : (date.getDay() == 3) ? "Friday" 
+        //             : (date.getDay() == 4) ? "Saturday" 
+        //             : "Sunday" 
+        // return day + ", " + date.getDate() + " " + date.getMonth().toLocaleString('default', {month: 'long'}) + " " + date.getYear()
+        return date.getHours() + ":00" 
     }
 
     return (
@@ -69,35 +73,42 @@ function Home() {
             weather ? (
                 <Container>
                     <Grid divided='vertically' padded>
-                        <Grid.Row columns={2}>
-                            <Grid.Column textAlign='center' width={3} >
-                                <div style={{overflow: 'hidden'}}>
-                                    <Image style={{transform: 'scale(1.8)'}} centered src= {'https://openweathermap.org/img/wn/'+ weather['current']['weather'][0]['icon']+'@4x.png'} size="tiny"></Image>
-                                </div>
-                                <p >{(weather['current']['weather'][0]['description']).toUpperCase()}</p>
-                            </Grid.Column>
-                            <Grid.Column textAlign='left' width={3}>
-                                <span style={{fontSize: '30px'}}>{weather['current']['temp']}°C</span><br/><br/>
-                                <span style={{color:"gray"}} >Humidity: {weather['current']['humidity']}%</span><br/>
-                                <span style={{color:"gray"}} >Wind: {weather['current']['wind_speed']}m/s</span><br/>
-                                <span style={{color:"gray"}} >Precipitation: {getPrecip()}%</span><br/>
-                            </Grid.Column>
-                            <Grid.Column textAlign='right' width={10}>
-                                <p style={{fontSize: '22px'}}>{location['address']['county'] + ", " + location['address']['city']}
-                                <br/>
-                                {   
-                                    location['address']['state_district'] === undefined ? (
-                                        location['address']['state']
-                                    ) : (
-                                        location['address']['state_district']
-                                    )
-                                }
-                                <br/>
-                                <span style={{fontSize: '18px', color: 'gray'}}>{location['address']['country']}</span>
-                                </p>
-                            </Grid.Column>
-                        </Grid.Row>
+                        {/* For Computer & Tablet */}
+                        <Computer weather={weather} location={location} />
+
+                        {/* For Mobile */}
+                        <Mobile weather={weather} location={location} />
                     </Grid>
+                    <div style={{ overflow: 'auto', whiteSpace: 'nowrap', }}>
+                        {
+                            weather['hourly'].map(item => {
+                                return (
+                                    <div key={item['dt']} style={{ display: 'inline-block', textAlign: 'left' , margin: '0px 20px 10px 0px'}}>
+                                        <Card style={{width: "120px", backgroundColor: 'rgb(255, 255, 255)', border: 'none', boxShadow: 'none'}} >
+                                            <img style={{filter: 'brightness(90%)', textAlign:'center'}} centered src={'https://openweathermap.org/img/wn/' + item['weather'][0]['icon'] + '@4x.png'} size="small" alt="Not Found" />
+                                            <Card.Content >
+                                                {/* <Card.Header>{getTime(item['dt']*1000)}</Card.Header> */}
+                                                <Card.Description>{getTime(item['dt']*1000)}</Card.Description>
+                                                {/* <Card.Meta>
+                                                    <span className='date'>Joined in 2015</span>
+                                                </Card.Meta> */}
+                                                <Card.Description>
+                                                    Prec: {item['pop']}%
+                                                </Card.Description>
+                                            </Card.Content>
+                                            <Card.Content extra>
+                                                <p>
+                                                    <Icon name='user' />
+                                                    22 Friends
+                                                </p>
+                                            </Card.Content>
+                                        </Card>
+
+
+                                    </div>
+                                )
+                            })}
+                    </div>
                 </Container>
             ) : (
                 <>
