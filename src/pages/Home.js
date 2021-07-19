@@ -4,6 +4,8 @@ import axios from 'axios';
 import { Grid, Container, Card, Icon, Image } from 'semantic-ui-react'
 import Mobile from './../components/Mobile'
 import Computer from './../components/Computer'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCloudRain, faThermometerHalf, faTint, faWind } from '@fortawesome/free-solid-svg-icons'
 
 function Home() {
     const [latitude, setLatitude] = useState(null)
@@ -56,7 +58,7 @@ function Home() {
             });
     }
 
-    function getTime(val){
+    function getTime(val) {
         let date = new Date(val)
         // let day = (date.getDay() == 0) ? "Monday" 
         //             : (date.getDay() == 1) ? "Tuesday" 
@@ -65,7 +67,7 @@ function Home() {
         //             : (date.getDay() == 4) ? "Saturday" 
         //             : "Sunday" 
         // return day + ", " + date.getDate() + " " + date.getMonth().toLocaleString('default', {month: 'long'}) + " " + date.getYear()
-        return date.getHours() + ":00" 
+        return date.getHours() + ":00"
     }
 
     return (
@@ -83,28 +85,30 @@ function Home() {
                         {
                             weather['hourly'].map(item => {
                                 return (
-                                    <div key={item['dt']} style={{ display: 'inline-block', textAlign: 'left' , margin: '0px 20px 10px 0px'}}>
-                                        <Card style={{width: "120px", backgroundColor: 'rgb(255, 255, 255)', border: 'none', boxShadow: 'none'}} >
-                                            <img style={{filter: 'brightness(90%)', textAlign:'center'}} centered src={'https://openweathermap.org/img/wn/' + item['weather'][0]['icon'] + '@4x.png'} size="small" alt="Not Found" />
+                                    <div key={item['dt']} style={{ display: 'inline-block', textAlign: 'left', margin: '0px 20px 10px 0px' }}>
+                                        <Card style={{ width: "120px", backgroundColor: 'rgb(255, 255, 255)', border: 'none', boxShadow: 'none' }} >
+                                            <img style={{ filter: 'brightness(90%)', textAlign: 'center' }} centered src={'https://openweathermap.org/img/wn/' + item['weather'][0]['icon'] + '@4x.png'} size="small" alt="Not Found" />
                                             <Card.Content >
                                                 {/* <Card.Header>{getTime(item['dt']*1000)}</Card.Header> */}
-                                                <Card.Description>{getTime(item['dt']*1000)}</Card.Description>
-                                                {/* <Card.Meta>
-                                                    <span className='date'>Joined in 2015</span>
-                                                </Card.Meta> */}
+                                                <Card.Header style={{ fontSize: '15px' }}>{getTime(item['dt'] * 1000)}</Card.Header>
+                                                <Card.Meta>
+                                                    <span style={{ fontSize: '12px' }}>{item['weather'][0]['description'].toUpperCase()}</span>
+                                                </Card.Meta>
                                                 <Card.Description>
-                                                    Prec: {item['pop']}%
+                                                    <FontAwesomeIcon icon={faCloudRain} />&ensp;{(item['pop']*100).toFixed(0)}%
+                                                </Card.Description>
+                                                <Card.Description>
+                                                    <FontAwesomeIcon icon={faThermometerHalf} />&emsp;{item['temp'].toFixed(0)}°C
+                                                </Card.Description>
+                                                <Card.Description>
+                                                    <FontAwesomeIcon icon={faTint} />&ensp;&nbsp;&nbsp;{item['humidity'].toFixed(0)}%
+                                                </Card.Description>
+                                                <Card.Description>
+                                                    <FontAwesomeIcon icon={faWind} />&ensp;{item['wind_speed'].toFixed(0)} m/s
                                                 </Card.Description>
                                             </Card.Content>
-                                            <Card.Content extra>
-                                                <p>
-                                                    <Icon name='user' />
-                                                    22 Friends
-                                                </p>
-                                            </Card.Content>
+                                            
                                         </Card>
-
-
                                     </div>
                                 )
                             })}
