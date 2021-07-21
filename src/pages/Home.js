@@ -44,6 +44,7 @@ function Home() {
                     } else if (result.state === "prompt") {
                         console.log(result.state);
                     } else if (result.state === "denied") {
+                        console.log(result.state)
                         setStats("You have to enable your location")
                     }
                     result.onchange = function () {
@@ -83,30 +84,50 @@ function Home() {
     }
 
     function getWeather() {
-        
+        var errorCheck = true;
         axios({
             method: 'GET',
             url: 'https://cors-anywhere.herokuapp.com/https://api.openweathermap.org/data/2.5/onecall?lat=' + latitude + '&lon=' + longitude + '&exclude=minutely,daily&units=metric&appid=98cbf771881782a7fd24dc4d2219599a',
+            // url: 'https://api.openweathermap.org/data/2.5/onecall?lat=' + latitude + '&lon=' + longitude + '&exclude=minutely,daily&units=metric&appid=98cbf771881782a7fd24dc4d2219599a',
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET, POST',
                 'Access-Control-Allow-Headers': 'Origin, X-Requested-Qith, Content-Type, Accept'
             },
         })
-        // axios.get('https://api.openweathermap.org/data/2.5/onecall?lat=' + latitude + '&lon=' + longitude + '&exclude=minutely,daily&units=metric&appid=98cbf771881782a7fd24dc4d2219599a')
-            .then(function (response) {
-                // handle success
-                setWeather(response.data)
-                console.log(response)
-            })
-            .catch(function (error) {
-                // handle error
-                console.log(JSON.stringify(error))
-                alert("Error getWeather")
-            })
-            .then(function () {
-                // always executed
-            });
+        .then(function (response) {
+            // handle success
+            setWeather(response.data)
+            console.log(response)
+        })
+        .catch(function (error) {
+            // handle error
+            // console.log(JSON.stringify(error))
+            console.log(error)
+            // alert("Error getWeather")
+            errorCheck = false
+            console.log("1")
+        })
+        .then(function () {
+            // always executed
+            if(errorCheck===false){
+                axios.get('https://api.openweathermap.org/data/2.5/onecall?lat=' + latitude + '&lon=' + longitude + '&exclude=minutely,daily&units=metric&appid=98cbf771881782a7fd24dc4d2219599a')
+                .then(function (response) {
+                    // handle success
+                    setWeather(response.data)
+                    console.log(response)
+                })
+                .catch(function (error) {
+                    // handle error
+                    // console.log(JSON.stringify(error))
+                    console.log(error)
+                    alert("Error getWeather")
+                })
+                .then(function () {
+                    // always executed
+                });
+            }
+        });
     }
 
     function getTime(val) {
