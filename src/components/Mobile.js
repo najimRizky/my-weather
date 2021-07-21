@@ -28,8 +28,8 @@ function Mobile(props) {
             <Grid.Column textAlign='left' width={8}>
                 <span style={{ fontSize: '30px' }}>{props.weather['current']['temp']}°C</span><br /><br />
                 <span style={{ color: "#3b3b3b" }} >Humidity: {props.weather['current']['humidity']}%</span><br />
-                <span style={{ color: "#3b3b3b" }} >Wind: {props.weather['current']['wind_speed']}m/s</span><br />
-                <span style={{ color: "#3b3b3b" }} >Precipitation: {props.weather['hourly'][0]['pop']*100}%</span><br />
+                <span style={{ color: "#3b3b3b" }} >Wind: {(props.weather['current']['wind_speed']*3.6).toFixed(0)} km/h</span><br />
+                <span style={{ color: "#3b3b3b" }} >Precipitation: {(props.weather['hourly'][0]['pop']*100).toFixed(0)}%</span><br />
             </Grid.Column>
         </Grid.Row>
     )

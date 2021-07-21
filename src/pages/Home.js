@@ -19,18 +19,18 @@ function Home() {
     const [stats, setStats] = useState("Loading")
 
     useEffect(() => {
-        if (!latitude && !longitude) getLatLon()
-        if (!!latitude && !!longitude && !location) getLocation()
-        if (!!latitude && !!longitude && !!location && !weather) getWeather()
-        console.log("sini")
+        if (latitude == null && longitude == null) getLatLon()
+        if (latitude !== null && longitude !== null && !location) getLocation()
+        if (latitude !== null && longitude !== null && !!location && !weather) getWeather()
         // eslint-disable-next-line
     }, [latitude, longitude, location, weather])
 
     function getLatLon() {
-        console.log("sini")
         navigator.geolocation.getCurrentPosition(function (position) {
             setLatitude(position.coords.latitude)
             setLongitude(position.coords.longitude)
+            // console.log(position.coords.longitude)
+            // console.log(position.coords.latitude)
         });
         checkPermission()
     }
@@ -48,6 +48,7 @@ function Home() {
                     }
                     result.onchange = function () {
                         console.log(result.state)
+                        console.log("Sini")
                         if(result.state === "granted") window.location.reload()
                         else if(result.state === "denied") setStats("You have to enable your location")
                     };
@@ -57,32 +58,51 @@ function Home() {
         }
     }
 
-
     function getLocation() {
-        axios.get('https://us1.locationiq.com/v1/reverse.php?key=pk.43eca1a5c71fa8c277ecef1c575eb353&lat=' + latitude + '&lon=' + longitude + '&format=json')
-            .then(function (response) {
+        axios({
+            method: 'GET',
+            url: 'https://us1.locationiq.com/v1/reverse.php?key=pk.43eca1a5c71fa8c277ecef1c575eb353&lat=' + latitude + '&lon=' + longitude + '&format=json',
+            headers: {
+                "Accept-Language": "en-US,en;"
+            }
+        }).then(function (response) {
                 // handle success
-                let data = response.data
-                setLocation(data)
+                // console.log(response.data)
+                setLocation(response.data)
+                console.log(Object.keys(response.data['address']))
             })
             .catch(function (error) {
                 // handle error
                 console.log(error)
+                alert("Error getLocation")
             })
             .then(function () {
                 // always executed
             });
+        // axios.get('https://us1.locationiq.com/v1/reverse.php?key=pk.43eca1a5c71fa8c277ecef1c575eb353&lat=' + latitude + '&lon=' + longitude + '&format=json')
     }
 
     function getWeather() {
-        axios.get('https://api.openweathermap.org/data/2.5/onecall?lat=' + latitude + '&lon=' + longitude + '&exclude=minutely,daily&units=metric&lang=id&appid=98cbf771881782a7fd24dc4d2219599a')
+        
+        axios({
+            method: 'GET',
+            url: 'https://cors-anywhere.herokuapp.com/https://api.openweathermap.org/data/2.5/onecall?lat=' + latitude + '&lon=' + longitude + '&exclude=minutely,daily&units=metric&appid=98cbf771881782a7fd24dc4d2219599a',
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'GET, POST',
+                'Access-Control-Allow-Headers': 'Origin, X-Requested-Qith, Content-Type, Accept'
+            },
+        })
+        // axios.get('https://api.openweathermap.org/data/2.5/onecall?lat=' + latitude + '&lon=' + longitude + '&exclude=minutely,daily&units=metric&appid=98cbf771881782a7fd24dc4d2219599a')
             .then(function (response) {
                 // handle success
                 setWeather(response.data)
+                console.log(response)
             })
             .catch(function (error) {
                 // handle error
-                console.log(error)
+                console.log(JSON.stringify(error))
+                alert("Error getWeather")
             })
             .then(function () {
                 // always executed
