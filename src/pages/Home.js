@@ -87,12 +87,12 @@ function Home() {
         var errorCheck = true;
         axios({
             method: 'GET',
-            url: 'https://cors-anywhere.herokuapp.com/https://api.openweathermap.org/data/2.5/onecall?lat=' + latitude + '&lon=' + longitude + '&exclude=minutely,daily&units=metric&appid=98cbf771881782a7fd24dc4d2219599a',
+            url: 'https://cors.bridged.cc/https://api.openweathermap.org/data/2.5/onecall?lat=' + latitude + '&lon=' + longitude + '&exclude=minutely,daily&units=metric&appid=98cbf771881782a7fd24dc4d2219599a',
             // url: 'https://api.openweathermap.org/data/2.5/onecall?lat=' + latitude + '&lon=' + longitude + '&exclude=minutely,daily&units=metric&appid=98cbf771881782a7fd24dc4d2219599a',
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET, POST',
-                'Access-Control-Allow-Headers': 'Origin, X-Requested-Qith, Content-Type, Accept'
+                'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
             },
         })
         .then(function (response) {
