@@ -5,18 +5,11 @@ function Mobile(props) {
     return (
         <Grid.Row only="mobile">
             <Grid.Column textAlign='left' width={16}>
-                <p style={{ fontSize: '22px' }}>{props.location['address']['county'] + ", " + props.location['address']['city']}
+                <p style={{ fontSize: '22px' }}>{props.location['address'][Object.keys(props.location['address'])[2]] + ", " + props.location['address'][Object.keys(props.location['address'])[3]]}
                     <br />
-                    {
-                        props.location['address']['state_district'] === undefined ? (
-                            props.location['address']['state']
-                        ) : (
-                            props.location['address']['state_district']
-                        )
-                    }
+                    {props.location['address'][Object.keys(props.location['address'])[4]]}
                     <br />
                     <span style={{ fontSize: '18px', color: '#3b3b3b' }}>{new Date(props.weather['current']['dt']*1000).getHours()}:00</span>
-                    {/* <span style={{ fontSize: '18px', color: 'gray' }}>{props.location['address']['country']}</span> */}
                 </p>
             </Grid.Column>
             <Grid.Column textAlign='center' width={4}>
