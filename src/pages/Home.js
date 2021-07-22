@@ -133,13 +133,14 @@ function Home() {
     function getTime(val) {
         let date = new Date(val)
         let today = new Date()
-        let day = (date.getDay() === 0) ? "Mon"
-                : (date.getDay() === 1) ? "Tue"
-                : (date.getDay() === 2) ? "Wed"
-                : (date.getDay() === 3) ? "Thu"
-                : (date.getDay() === 4) ? "Fri"
-                : (date.getDay() === 5) ? "Sat"
-                : "Sun"
+        let day = (date.getDay() === 0) ? "Sun"
+                : (date.getDay() === 1) ? "Mon"
+                : (date.getDay() === 2) ? "Tue"
+                : (date.getDay() === 3) ? "Wed"
+                : (date.getDay() === 4) ? "Thu"
+                : (date.getDay() === 5) ? "Fri"
+                : "Sat"
+        console.log(today.getDay() + " " + day)
         if (today.getDay() === date.getDay())
             return date.getHours() + ":00"
         else
