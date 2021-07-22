@@ -70,7 +70,7 @@ function Home() {
                 // handle success
                 // console.log(response.data)
                 setLocation(response.data)
-                console.log(Object.keys(response.data['address']))
+                // console.log(Object.keys(response.data['address']))
             })
             .catch(function (error) {
                 // handle error
@@ -98,7 +98,7 @@ function Home() {
         .then(function (response) {
             // handle success
             setWeather(response.data)
-            console.log(response)
+            // console.log(response)
         })
         .catch(function (error) {
             // handle error
