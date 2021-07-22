@@ -140,7 +140,6 @@ function Home() {
                 : (date.getDay() === 4) ? "Thu"
                 : (date.getDay() === 5) ? "Fri"
                 : "Sat"
-        console.log(today.getDay() + " " + day)
         if (today.getDay() === date.getDay())
             return date.getHours() + ":00"
         else
@@ -181,7 +180,7 @@ function Home() {
                                                     <FontAwesomeIcon icon={faTint} color="#4493d4" />&ensp;&nbsp;&nbsp;{item['humidity'].toFixed(0)}%
                                                 </Card.Description>
                                                 <Card.Description>
-                                                    <FontAwesomeIcon icon={faWind} />&ensp;{item['wind_speed'].toFixed(0)} m/s
+                                                    <FontAwesomeIcon icon={faWind} />&ensp;{(item['wind_speed']*3.6).toFixed(0)} km/h
                                                 </Card.Description>
                                             </Card.Content>
 

@@ -17,14 +17,15 @@ function Computer(props) {
                 <span style={{ color: "#3b3b3b" }} >Precipitation: {(props.weather['hourly'][0]['pop']*100).toFixed(0)}%</span><br />
             </Grid.Column>
             <Grid.Column textAlign='right' width={10}>
-                <p style={{ fontSize: '22px' }}>{props.location['address']['county'] + ", " + props.location['address']['city']}
+                <p style={{ fontSize: '22px' }}>{props.location['address'][Object.keys(props.location['address'])[2]] + ", " + props.location['address'][Object.keys(props.location['address'])[3]]}
                     <br />
+                    {props.location['address'][Object.keys(props.location['address'])[4]]}
                     {
-                        props.location['address']['state_district'] === undefined ? (
-                            props.location['address']['state']
-                        ) : (
-                            props.location['address']['state_district']
-                        )
+                        // props.location['address']['state_district'] === undefined ? (
+                        //     props.location['address']['state']
+                        // ) : (
+                        //     props.location['address']['state_district']
+                        // )
                     }
                     <br />
                     <span style={{ fontSize: '18px', color: '#3b3b3b' }}>{new Date(props.weather['current']['dt']*1000).getHours()}:00</span>
