@@ -13,7 +13,7 @@ function Mobile(props) {
                 </p>
             </Grid.Column>
             <Grid.Column textAlign='center' width={4}>
-                <div style={{ overflow: 'hidden', textAlign: 'center' }}>
+                <div style={{ textAlign: 'center' }}>
                     <Image className="weatherIcon" style={{ transform: 'scale(1.5)' }}  src={'https://openweathermap.org/img/wn/' + props.weather['current']['weather'][0]['icon'] + '@4x.png'} size="tiny"></Image>
                 </div>
                 <p >{(props.weather['current']['weather'][0]['description']).toUpperCase()}</p>

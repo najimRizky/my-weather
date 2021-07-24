@@ -5,7 +5,7 @@ function Computer(props) {
     return (
         <Grid.Row only="tablet computer">
             <Grid.Column textAlign='center' width={3}>
-                <div style={{ overflow: 'hidden' }}>
+                <div style={{  }}>
                     <Image className="weatherIcon" style={{ transform: 'scale(1.8)' }} centered src={'https://openweathermap.org/img/wn/' + props.weather['current']['weather'][0]['icon'] + '@4x.png'} size="tiny"></Image>
                 </div>
                 <p style={{ fontSize: '12px' }}>{(props.weather['current']['weather'][0]['description']).toUpperCase()}</p>
