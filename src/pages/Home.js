@@ -1,203 +1,138 @@
-// import React from 'react'
-import React, { useState, useEffect } from 'react'
+// import MyLocation from './../components/MyLocation'
 import axios from 'axios';
-import { Grid, Container, Card } from 'semantic-ui-react'
-import Mobile from './../components/Mobile'
-import Computer from './../components/Computer'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCloudRain, faThermometerHalf, faTint, faWind } from '@fortawesome/free-solid-svg-icons'
+// import _ from 'lodash'
+import React from 'react'
+import { Search, Grid, Container } from 'semantic-ui-react'
 
-// import { Platform } from "react-native";
-// import { PERMISSIONS, request } from "react-native-permissions";
-// import * as Geolocation from "@react-native-community/geolocation";
+const source = []
+const longi = []
+const latit = []
 
-function Home() {
-    const [latitude, setLatitude] = useState(null)
-    const [longitude, setLongitude] = useState(null)
-    const [location, setLocation] = useState(null)
-    const [weather, setWeather] = useState(null)
-    const [stats, setStats] = useState("Loading")
+const initialState = {
+    loading: false,
+    results: [],
+    value: '',
+}
 
-    useEffect(() => {
-        if (latitude == null && longitude == null) getLatLon()
-        if (latitude !== null && longitude !== null && !location) getLocation()
-        if (latitude !== null && longitude !== null && !!location && !weather) getWeather()
-        // eslint-disable-next-line
-    }, [latitude, longitude, location, weather])
+function truncate(source, size) {
+    var tmp = source.split(',')[0]
+    var tmp2 = source.split(',')[1] !== undefined ? ", " + source.split(',')[1] : ""
+    var tmp3 = source.split(',')[2] !== undefined ? ", " + source.split(',')[2] : ""
+    // return source.length > size ? source.slice(0, size - 1) + "…" : source;
+    return tmp + tmp2 + tmp3
+}
 
-    function getLatLon() {
-        navigator.geolocation.getCurrentPosition(function (position) {
-            setLatitude(position.coords.latitude)
-            setLongitude(position.coords.longitude)
-            // console.log(position.coords.longitude)
-            // console.log(position.coords.latitude)
-        });
-        checkPermission()
+const resultRenderer = ({ title, lat, lon }) => <p >{truncate(title, 30)}</p>
+
+const populateData = (data) => {
+    source.length = 0
+    // source.push(data)
+    for (let i = 0; i < data.length; i++) {
+        source.push({ "title": data[i].display_name, "lat": data[i].lat, "lon": data[i].lon })
     }
-    function checkPermission() {
-        if (navigator.geolocation) {
-            navigator.permissions
-                .query({ name: "geolocation" })
-                .then(function (result) {
-                    if (result.state === "granted") {
-                        console.log(result.state);
-                    } else if (result.state === "prompt") {
-                        console.log(result.state);
-                    } else if (result.state === "denied") {
-                        console.log(result.state)
-                        setStats("You have to enable your location")
-                    }
-                    result.onchange = function () {
-                        console.log(result.state)
-                        console.log("Sini")
-                        if(result.state === "granted") window.location.reload()
-                        else if(result.state === "denied") setStats("You have to enable your location")
-                    };
-                });
-        } else {
-            alert("Sorry Not available!");
+}
+
+function exampleReducer(state, action) {
+    switch (action.type) {
+        case 'CLEAN_QUERY':
+            return initialState
+        case 'START_SEARCH':
+            return { ...state, loading: true, value: action.query }
+        case 'FINISH_SEARCH':
+            return { ...state, loading: false, results: action.results }
+        case 'UPDATE_SELECTION':
+            var lat = (action.selection).split(',')[((action.selection).split(',').length) -2]
+            var lon = (action.selection).split(',')[((action.selection).split(',').length) -1]
+            setLatLon(lat, lon)
+            return { ...state, value: action.selection }
+        default:
+            throw new Error()
+    }
+}
+
+function getLocation(keywords) {
+    axios({
+        method: 'GET',
+        url: 'https://us1.locationiq.com/v1/search.php?key=pk.43eca1a5c71fa8c277ecef1c575eb353&q=' + keywords + '&format=json',
+        headers: {
+            "Accept-Language": "en-US,en;"
         }
-    }
-
-    function getLocation() {
-        axios({
-            method: 'GET',
-            url: 'https://us1.locationiq.com/v1/reverse.php?key=pk.43eca1a5c71fa8c277ecef1c575eb353&lat=' + latitude + '&lon=' + longitude + '&format=json',
-            headers: {
-                "Accept-Language": "en-US,en;"
-            }
-        }).then(function (response) {
-                // handle success
-                // console.log(response.data)
-                setLocation(response.data)
-                // console.log(Object.keys(response.data['address']))
-            })
-            .catch(function (error) {
-                // handle error
-                console.log(error)
-                alert("Error getLocation")
-            })
-            .then(function () {
-                // always executed
-            });
-        // axios.get('https://us1.locationiq.com/v1/reverse.php?key=pk.43eca1a5c71fa8c277ecef1c575eb353&lat=' + latitude + '&lon=' + longitude + '&format=json')
-    }
-
-    function getWeather() {
-        var errorCheck = true;
-        
-        axios.get('https://api.openweathermap.org/data/2.5/onecall?lat=' + latitude + '&lon=' + longitude + '&exclude=minutely,daily&units=metric&appid=98cbf771881782a7fd24dc4d2219599a')
+    })
         .then(function (response) {
-            // handle success
-            setWeather(response.data)
-            // console.log(response)
+            // console.log(response.data)
+            populateData(response.data)
+            // console.log(response.data)
         })
         .catch(function (error) {
-            // handle error
             console.log(error)
-            // console.log(error['config']['url'])
-            // alert("Error getWeather")
-            errorCheck = false
+            // alert("Error getLocation")
+            source.length = 0
         })
         .then(function () {
-            // always executed
-            if(errorCheck===false){
-                axios({
-                    method: 'GET',
-                    url: 'https://cors-anywhere.herokuapp.com/https://api.openweathermap.org/data/2.5/onecall?lat=' + latitude + '&lon=' + longitude + '&exclude=minutely,daily&units=metric&appid=98cbf771881782a7fd24dc4d2219599a',
-                    // url: 'https://api.openweathermap.org/data/2.5/onecall?lat=' + latitude + '&lon=' + longitude + '&exclude=minutely,daily&units=metric&appid=98cbf771881782a7fd24dc4d2219599a',
-                    headers: {
-                        'Access-Control-Allow-Origin': '*',
-                        'Access-Control-Allow-Methods': 'GET, POST',
-                        'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept'
-                    },
-                })
-                .then(function (response) {
-                    // handle success
-                    setWeather(response.data)
-                    // console.log(response)
-                })
-                .catch(function (error) {
-                    // handle error
-                    // console.log(JSON.stringify(error))
-                    setStats("Open this, click request button, then go back to this page>> <a href="+error['config']['url']+">Link</a>")
-                    console.log(error)
-                    alert("Error getWeather")
-                })
-                .then(function () {
-                    // always executed
-                });
-            }
+            //
         });
-    }
+}
 
-    function getTime(val) {
-        let date = new Date(val)
-        let today = new Date()
-        let day = (date.getDay() === 0) ? "Sun"
-                : (date.getDay() === 1) ? "Mon"
-                : (date.getDay() === 2) ? "Tue"
-                : (date.getDay() === 3) ? "Wed"
-                : (date.getDay() === 4) ? "Thu"
-                : (date.getDay() === 5) ? "Fri"
-                : "Sat"
-        if (today.getDay() === date.getDay())
-            return date.getHours() + ":00"
-        else
-            return day + ", " + date.getHours() + ":00"
-    }
+function setLatLon(lat, lon) {
+    latit.length = 0
+    longi.length = 0
+    latit.push(lat)
+    longi.push(lon)
+
+    console.log("sini")
+}
+
+function Home() {
+    const [state, dispatch] = React.useReducer(exampleReducer, initialState)
+    const { loading, results, value } = state
+
+    const timeoutRef = React.useRef()
+    const handleSearchChange = React.useCallback((e, data) => {
+        clearTimeout(timeoutRef.current)
+        dispatch({ type: 'START_SEARCH', query: data.value })
+
+        timeoutRef.current = setTimeout(() => {
+            if (data.value.length === 0 || (data.value).replace(/\s/g, '').length === 0) {
+                source.length = 0
+                latit.length = 0
+                longi.length = 0
+                dispatch({ type: 'CLEAN_QUERY' })
+                return
+            }
+
+            getLocation(data.value)
+            setTimeout(() => {
+                dispatch({
+                    type: 'FINISH_SEARCH',
+                    results: source,
+                })
+            }, 500)
+        }, 600)
+    }, [])
+    React.useEffect(() => {
+        return () => {
+            clearTimeout(timeoutRef.current)
+        }
+    }, [])
 
     return (
-        <>{
-            weather ? (
-                <Container>
-                    <Grid divided='vertically' padded>
-                        {/* For Computer & Tablet */}
-                        <Computer weather={weather} location={location} />
-
-                        {/* For Mobile */}
-                        <Mobile weather={weather} location={location} />
-                    </Grid>
-                    <div style={{ overflow: 'auto', whiteSpace: 'nowrap', }}>
-                        {
-                            weather['hourly'].slice(1).map(item => {
-                                return (
-                                    <div key={item['dt']} style={{ display: 'inline-block', textAlign: 'left', margin: '0px 20px 10px 0px' }}>
-                                        <Card style={{ maxWidth: "160px", backgroundColor: 'rgba(255, 255, 255, 0.2)', border: 'none', boxShadow: 'none', }} >
-                                            <img style={{ filter: 'brightness(100%)', textAlign: 'center' }} src={'https://openweathermap.org/img/wn/' + item['weather'][0]['icon'] + '@4x.png'} size="small" alt="Not Found" />
-                                            <Card.Content >
-                                                {/* <Card.Header>{getTime(item['dt']*1000)}</Card.Header> */}
-                                                <Card.Header style={{ fontSize: '15px' }}>{getTime(item['dt'] * 1000)}</Card.Header>
-                                                {/* <Card. style={{width: '160px'}}> */}
-                                                <p style={{ fontSize: '9px', color: "#3b3b3b" }}>{item['weather'][0]['description'].toUpperCase()}</p>
-                                                {/* </Card.Meta> */}
-                                                <Card.Description>
-                                                    <FontAwesomeIcon icon={faCloudRain} color="white" />&ensp;{(item['pop'] * 100).toFixed(0)}%
-                                                </Card.Description>
-                                                <Card.Description>
-                                                    <FontAwesomeIcon icon={faThermometerHalf} color="#e34744" />&emsp;{item['temp'].toFixed(0)}°C
-                                                </Card.Description>
-                                                <Card.Description>
-                                                    <FontAwesomeIcon icon={faTint} color="#4493d4" />&ensp;&nbsp;&nbsp;{item['humidity'].toFixed(0)}%
-                                                </Card.Description>
-                                                <Card.Description>
-                                                    <FontAwesomeIcon icon={faWind} />&ensp;{(item['wind_speed']*3.6).toFixed(0)} km/h
-                                                </Card.Description>
-                                            </Card.Content>
-
-                                        </Card>
-                                    </div>
-                                )
-                            })}
-                    </div>
-                </Container>
-            ) : (
+        // <MyLocation/>
+        <Container style={{ color: 'black' }} textAlign="left">
+            <Grid>
+                <Grid.Column width={6}>
+                    <Search loading={loading} onResultSelect={(e, data) => dispatch({ type: 'UPDATE_SELECTION', selection: data.result.title+","+data.result.lat+","+data.result.lon }) }  onSearchChange={handleSearchChange} results={results} value={value} resultRenderer={resultRenderer} />
+                </Grid.Column>
+            </Grid>
+            {latit.length !== 0 ? (
                 <>
-                    {stats}
+                    Latitude  = {latit[0]}<br/>
+                    Longitude = {longi[0]}
                 </>
-            )
-        }</>
+            ) : (
+                <></>
+            )}
+        </Container >
     )
 }
 
-export default Home;
+export default Home
