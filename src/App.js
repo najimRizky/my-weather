@@ -23,7 +23,7 @@ function App() {
           <Redirect path="*" to="/"/>
         </Switch>
       </Router>
-      {/* <br/><br/><br/><br/> */}
+      <br/><br/>
     </div>
   );
 }

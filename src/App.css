@@ -6,7 +6,9 @@
   /* min-height: 100%; */
 }
 html, body, #root, .App {
-  height: 110%;
+  /* height: 110% !important; */
+  height: auto;
+  min-height: 100vh;
 }
 
 .App-logo {

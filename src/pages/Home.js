@@ -152,10 +152,10 @@ function Home() {
     }, [])
     return (
         // <MyLocation/>
-        <Container style={{ color: 'black' }} textAlign="left">
-            <Grid>
+        <Container style={{ color: 'black' }} textAlign="">
+            <Grid centered>
                 <Grid.Column width={16}>
-                    <Search loading={loading} onResultSelect={(e, data) => dispatch({ type: 'UPDATE_SELECTION', selection: data.result.title + "," + data.result.lat + "," + data.result.lon })} onSearchChange={handleSearchChange} results={results} value={value} resultRenderer={resultRenderer} />
+                    <Search width={160} loading={loading} onResultSelect={(e, data) => dispatch({ type: 'UPDATE_SELECTION', selection: data.result.title + "," + data.result.lat + "," + data.result.lon })} onSearchChange={handleSearchChange} results={results} value={value} resultRenderer={resultRenderer} />
                 </Grid.Column>
             </Grid>
             <br /><br />
