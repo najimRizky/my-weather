@@ -54,3 +54,9 @@ html, body, #root, .App {
   50% {bottom: 6px; filter: brightness(110%);}
  100% {bottom: 0px; filter: brightness(100%);}
 }
+
+.ui.segment {
+  border: none !important;
+  background: transparent !important;
+  z-index: +2;
+}
