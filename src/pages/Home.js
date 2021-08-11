@@ -3,10 +3,12 @@ import axios from 'axios';
 // import _ from 'lodash'
 import React from 'react'
 import { Search, Grid, Container } from 'semantic-ui-react'
+import CustomLocation from '../components/CustomLocation';
 
 const source = []
 const longi = []
 const latit = []
+const count = [0]
 
 const initialState = {
     loading: false,
@@ -25,11 +27,16 @@ function truncate(source, size) {
 const resultRenderer = ({ title, lat, lon }) => <p >{truncate(title, 30)}</p>
 
 const populateData = (data) => {
-    source.length = 0
+
     // source.push(data)
     for (let i = 0; i < data.length; i++) {
         source.push({ "title": data[i].display_name, "lat": data[i].lat, "lon": data[i].lon })
     }
+}
+
+const resetLatLon = () => {
+    latit.length = 0
+    longi.length = 0
 }
 
 function exampleReducer(state, action) {
@@ -41,8 +48,9 @@ function exampleReducer(state, action) {
         case 'FINISH_SEARCH':
             return { ...state, loading: false, results: action.results }
         case 'UPDATE_SELECTION':
-            var lat = (action.selection).split(',')[((action.selection).split(',').length) -2]
-            var lon = (action.selection).split(',')[((action.selection).split(',').length) -1]
+            resetLatLon()
+            var lat = (action.selection).split(',')[((action.selection).split(',').length) - 2]
+            var lon = (action.selection).split(',')[((action.selection).split(',').length) - 1]
             setLatLon(lat, lon)
             return { ...state, value: action.selection }
         default:
@@ -50,7 +58,8 @@ function exampleReducer(state, action) {
     }
 }
 
-function getLocation(keywords) {
+
+async function getLocation(keywords) {
     axios({
         method: 'GET',
         url: 'https://us1.locationiq.com/v1/search.php?key=pk.43eca1a5c71fa8c277ecef1c575eb353&q=' + keywords + '&format=json',
@@ -59,9 +68,10 @@ function getLocation(keywords) {
         }
     })
         .then(function (response) {
-            // console.log(response.data)
+            console.log(response.data)
             populateData(response.data)
             // console.log(response.data)
+            // return populateData(response.data)
         })
         .catch(function (error) {
             console.log(error)
@@ -69,25 +79,46 @@ function getLocation(keywords) {
             source.length = 0
         })
         .then(function () {
-            //
+            // console.log("Get location finish")
+            // console.log(source.length)
         });
 }
-
 function setLatLon(lat, lon) {
-    latit.length = 0
-    longi.length = 0
     latit.push(lat)
     longi.push(lon)
-
-    console.log("sini")
 }
+
 
 function Home() {
     const [state, dispatch] = React.useReducer(exampleReducer, initialState)
     const { loading, results, value } = state
 
+    function confirmFetchData() {
+        if (source.length === 0)
+            if (count[0] < 7) {
+                setTimeout(function () { confirmFetchData() }, 300);
+                count[0]++
+            } else {
+                dispatch({
+                    type: 'FINISH_SEARCH',
+                    results: source,
+                })
+                count[0] = 0
+                return
+            }
+        else {
+            dispatch({
+                type: 'FINISH_SEARCH',
+                results: source,
+            })
+            return
+        }
+    }
+
     const timeoutRef = React.useRef()
     const handleSearchChange = React.useCallback((e, data) => {
+        // latit.length = 0
+        // longi.length = 0
         clearTimeout(timeoutRef.current)
         dispatch({ type: 'START_SEARCH', query: data.value })
 
@@ -101,32 +132,39 @@ function Home() {
             }
 
             getLocation(data.value)
-            setTimeout(() => {
-                dispatch({
-                    type: 'FINISH_SEARCH',
-                    results: source,
+                .then(function () {
+                    source.length = 0
                 })
-            }, 500)
-        }, 600)
+                .then(
+                    function () {
+                        // eslint-disable-next-line
+                        confirmFetchData()
+                    }
+                )
+        }, 300)
+
+        // eslint-disable-next-line
     }, [])
     React.useEffect(() => {
         return () => {
             clearTimeout(timeoutRef.current)
         }
     }, [])
-
     return (
         // <MyLocation/>
         <Container style={{ color: 'black' }} textAlign="left">
             <Grid>
-                <Grid.Column width={6}>
-                    <Search loading={loading} onResultSelect={(e, data) => dispatch({ type: 'UPDATE_SELECTION', selection: data.result.title+","+data.result.lat+","+data.result.lon }) }  onSearchChange={handleSearchChange} results={results} value={value} resultRenderer={resultRenderer} />
+                <Grid.Column width={16}>
+                    <Search loading={loading} onResultSelect={(e, data) => dispatch({ type: 'UPDATE_SELECTION', selection: data.result.title + "," + data.result.lat + "," + data.result.lon })} onSearchChange={handleSearchChange} results={results} value={value} resultRenderer={resultRenderer} />
                 </Grid.Column>
             </Grid>
-            {latit.length !== 0 ? (
+            <br /><br />
+            <br /><br />
+            {latit.length !== 0 || longi.length !== 0 ? (
                 <>
-                    Latitude  = {latit[0]}<br/>
-                    Longitude = {longi[0]}
+                    {/* Latitude  = {latit[0]}<br/>
+                    Longitude = {longi[0]} */}
+                    <CustomLocation lat={latit[0]} lon={longi[0]} />
                 </>
             ) : (
                 <></>
