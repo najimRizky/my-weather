@@ -18,7 +18,7 @@ export default class MenuExampleInvertedSecondary extends Component {
     return (
       <Container>
         <Grid centered textAlign="center">
-          <Grid.Column mobile={12} computer={8}>
+          <Grid.Column mobile={16} computer={8}>
             <Segment style={{border: "none", boxShadow: "none"}}>
               <Menu  pointing secondary widths={2}>
                 <Menu.Item
@@ -39,7 +39,7 @@ export default class MenuExampleInvertedSecondary extends Component {
             </Segment>
           </Grid.Column>
         </Grid>
-      </Container>
+        </Container>
     )
   }
 }

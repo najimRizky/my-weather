@@ -141,7 +141,7 @@ function Home() {
                         confirmFetchData()
                     }
                 )
-        }, 300)
+        }, 1000)
 
         // eslint-disable-next-line
     }, [])
@@ -154,8 +154,8 @@ function Home() {
         // <MyLocation/>
         <Container style={{ color: 'black' }} textAlign="">
             <Grid centered>
-                <Grid.Column width={16}>
-                    <Search width={160} loading={loading} onResultSelect={(e, data) => dispatch({ type: 'UPDATE_SELECTION', selection: data.result.title + "," + data.result.lat + "," + data.result.lon })} onSearchChange={handleSearchChange} results={results} value={value} resultRenderer={resultRenderer} />
+                <Grid.Column computer={8} tablet={12} >
+                    <Search input={{fluid: true}} loading={loading} onResultSelect={(e, data) => dispatch({ type: 'UPDATE_SELECTION', selection: data.result.title + "," + data.result.lat + "," + data.result.lon })} onSearchChange={handleSearchChange} results={results} value={value} resultRenderer={resultRenderer} />
                 </Grid.Column>
             </Grid>
             <br /><br />

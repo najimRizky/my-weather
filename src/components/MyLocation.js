@@ -1,7 +1,7 @@
 // import React from 'react'
 import React, { useState, useEffect } from 'react'
 import axios from 'axios';
-import { Grid, Container } from 'semantic-ui-react'
+import { Grid, Container, Loader } from 'semantic-ui-react'
 import Mobile from './Mobile'
 import Computer from './Computer'
 import HourlyWeather from './HourlyWeather';
@@ -15,7 +15,7 @@ function MyLocation() {
     const [longitude, setLongitude] = useState(null)
     const [location, setLocation] = useState(null)
     const [weather, setWeather] = useState(null)
-    const [stats, setStats] = useState("Loading")
+    const [stats, setStats] = useState(<Loader active inline='centered' />)
 
     useEffect(() => {
         if (latitude == null && longitude == null) getLatLon()

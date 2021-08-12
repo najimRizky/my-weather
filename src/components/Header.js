@@ -6,9 +6,7 @@ import { Container, Image } from 'semantic-ui-react'
 
 function Header(){
     return(
-        <Container>
-            <Image src={logo} size="medium"></Image>
-        </Container>
+        <Image src={logo} size="medium"></Image>
     )
 }
 
