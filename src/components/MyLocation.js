@@ -133,7 +133,7 @@ function MyLocation() {
     return (
         <>{
             weather ? (
-                <Container>
+                <Container style={{color: "black"}}>
                     <Grid divided='vertically' padded>
                         {/* For Computer & Tablet */}
                         <Computer weather={weather} location={location} />

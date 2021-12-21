@@ -9,7 +9,6 @@ export default class MenuExampleInvertedSecondary extends Component {
   state = window.location.pathname === "/" ? {activeItem: "Your Location"} : {activeItem: "Search Other Location"}
   handleItemClick = (e, { name }) => {
     this.setState({ activeItem: name })
-    
   }
   render() {
     const { activeItem } = this.state 

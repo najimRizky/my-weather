@@ -12,9 +12,9 @@ function Computer(props) {
             </Grid.Column>
             <Grid.Column textAlign='left' width={3}>
                 <p style={{ fontSize: '28px', marginBottom: '-15px' }}>{props.weather['current']['temp']}°C</p><br />
-                <span style={{ color: "#3b3b3b" }} >Humidity: {props.weather['current']['humidity']}%</span><br />
-                <span style={{ color: "#3b3b3b" }} >Wind: {(props.weather['current']['wind_speed']*3.6).toFixed(0)} km/h</span><br />
-                <span style={{ color: "#3b3b3b" }} >Precipitation: {(props.weather['hourly'][0]['pop']*100).toFixed(0)}%</span><br />
+                <span >Humidity: {props.weather['current']['humidity']}%</span><br />
+                <span >Wind: {(props.weather['current']['wind_speed']*3.6).toFixed(0)} km/h</span><br />
+                <span >Precipitation: {(props.weather['hourly'][0]['pop']*100).toFixed(0)}%</span><br />
             </Grid.Column>
             <Grid.Column textAlign='right' width={10}>
                 <p style={{ fontSize: '22px' }}>{props.location['address'][Object.keys(props.location['address'])[2]] + ", " + props.location['address'][Object.keys(props.location['address'])[3]]}

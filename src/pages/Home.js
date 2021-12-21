@@ -9,7 +9,6 @@ const source = []
 const longi = []
 const latit = []
 const count = [0]
-
 const initialState = {
     loading: false,
     results: [],
@@ -87,7 +86,6 @@ function setLatLon(lat, lon) {
     latit.push(lat)
     longi.push(lon)
 }
-
 
 function Home() {
     const [state, dispatch] = React.useReducer(exampleReducer, initialState)

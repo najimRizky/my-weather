@@ -30,7 +30,7 @@ html, body, #root, .App {
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
+  color: black;
 }
 
 .App-link {
@@ -48,7 +48,8 @@ html, body, #root, .App {
 
 .weatherIcon {
   position: relative;
-  animation: mymove 2s infinite;
+  filter: brightness(120%);
+  /* animation: mymove 2s infinite; */
 }
 
 @keyframes mymove {
